@@ -1,33 +1,33 @@
 <script type="text/javascript">
-    RED.nodes.registerType('checkpoint block', {
-        category: 'checkpoint',
-        color: '#EF8FA6',
+    RED.nodes.registerType('icap answer', {
+        category: 'icap',
+        color: '#B481B9',
         defaults: {
             name: { value : "" },
-            wildfire: { type: 'checkpoint', required: true },
+            icap: { type: 'icap', required: true },
             group: { value: '' },
             comment: { value: '' }
         },
         inputs: 1,
         outputs: 0,
-        inputLabels: "ip",
-        paletteLabel: 'block ip',
-        icon: "checkpoint.png",
+        inputLabels: "answer",
+        paletteLabel: 'answer',
+        icon: "icap.png",
         label: function() {
-            return this.name || 'checkpoint block';
+            return this.name || 'icap answer';
         }
     });
 </script>
 
-<script type="text/x-red" data-template-name="checkpoint block">
+<script type="text/x-red" data-template-name="icap answer">
     <div class="form-row">
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
 
     <div class="form-row">
-        <label for="node-input-wildfire"><i class="fa fa-server"></i> Checkpoint</label>
-        <input type="text" id="node-input-wildfire" placeholder="wildfire">
+        <label for="node-input-icap"><i class="fa fa-server"></i> icap server</label>
+        <input type="text" id="node-input-icap" placeholder="icap">
     </div>
 
     <div class="form-row">
@@ -41,7 +41,7 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="checkpoint block">
+<script type="text/x-red" data-help-name="icap answer">
     <p>Send a payload to this node to block an ip.</p>
     <h3>Inputs</h3>
     <dl class="message-properties">

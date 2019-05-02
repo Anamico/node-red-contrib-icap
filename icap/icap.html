@@ -1,0 +1,52 @@
+<script type="text/javascript">
+    RED.nodes.registerType('icap', {
+        category: 'config',
+        color: '#B481B9',
+        defaults: {
+            name: { value : "", required: true },
+            port: { value : "", required: true },
+            requestSteps: { value : "1", required: true },
+            responseSteps: { value : "1", required: true }
+        },
+        icon: "icap.png",
+        label: function() {
+            return this.name;
+        },
+        paletteLabel: 'icap'
+    });
+</script>
+
+<script type="text/x-red" data-template-name="icap">
+    <div class="form-row">
+        <label for="node-config-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-config-input-name" placeholder="Name">
+    </div>
+    
+    <div class="form-row">
+        <label for="node-config-input-port"><i class="fa fa-plug"></i> Port</label>
+        <input type="text" id="node-config-input-port" placeholder="443">
+    </div>
+
+    <div class="form-row">
+        <label for="node-config-input-requestSteps"><i class="fa fa-plug"></i> Request Steps</label>
+        <input type="text" id="node-config-input-requestSteps" placeholder="1">
+    </div>
+    <div class="form-tips">
+        Tip: You need to specify how many Request "Check" nodes you will use.
+        Once the correct number of Request Check and Response Check Nodes are deployed, the icap service will be able to start
+    </div>
+
+    <div class="form-row">
+        <label for="node-config-input-responseSteps"><i class="fa fa-plug"></i> Response Steps</label>
+        <input type="text" id="node-config-input-responseSteps" placeholder="1">
+    </div>
+    <div class="form-tips">
+        Tip: You need to specify how many Response "Check" nodes you will use.
+        Once the correct number of Request Check and Response Check Nodes are deployed, the icap service will be able to start
+    </div>
+
+</script>
+
+<script type="text/x-red" data-help-name="checkpoint">
+    <p>Specify a port for the icap server to listen on, and the number of steps in the icap chain</p>
+</script>

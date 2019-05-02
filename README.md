@@ -1,28 +1,28 @@
-# Checkpoint Node-RED Client Nodes
-[![Latest NPM Version](https://img.shields.io/npm/v/Anamico/node-red-contrib-checkpoint.svg)](https://www.npmjs.com/package/Anamico/node-red-contrib-checkpoint)
-[![License](https://img.shields.io/github/license/Anamico/node-red-contrib-checkpoint.svg)](https://github.com/Anamico/node-red-contrib-checkpoint/blob/master/LICENSE)
-[![Awesome](https://img.shields.io/badge/awesome-true-green.svg)](https://github.com/Anamico/node-red-contrib-checkpoint)
+# icap Node-RED Nodes
+[![Latest NPM Version](https://img.shields.io/npm/v/Anamico/node-red-contrib-icap.svg)](https://www.npmjs.com/package/Anamico/node-red-contrib-icap)
+[![License](https://img.shields.io/github/license/Anamico/node-red-contrib-icap.svg)](https://github.com/Anamico/node-red-contrib-icap/blob/master/LICENSE)
+[![Awesome](https://img.shields.io/badge/awesome-true-green.svg)](https://github.com/Anamico/node-red-contrib-icap)
 
 ## Overview
 
-The [Checkpoint](https://www.checkpoint.com/products/next-generation-firewall/)
-firewall Node-RED client package enables the development of flows in
-[Node-RED](https://nodered.org/) which use Checkpoint features (update firewall rule, etc.) and enable integration with other security components, such as via the
+The [icap](https://en.wikipedia.org/wiki/Internet_Content_Adaptation_Protocol)
+ Node-RED package enables the development of flows in
+[Node-RED](https://nodered.org/) which enable icap features (REQMOD, RESPMOD, etc) and enable integration with other security components, such as via the
 [Data Exchange Layer](http://www.mcafee.com/us/solutions/data-exchange-layer.aspx) (DXL) fabric (such as with [node-red-contrib-dxl-tie-client](https://flows.nodered.org/node/@opendxl/node-red-contrib-dxl-tie-client)).
 
 ## Documentation
 
-See the [Wiki](https://github.com/Anamico/node-red-contrib-checkpoint/wiki)
-for an overview of the Checkpoint Node-RED client package and examples.
+See the [Wiki](https://github.com/Anamico/node-red-contrib-icap/wiki)
+for an overview of the icap Node-RED package and examples.
 
 See the
-[Checkpoint Node-RED Client Documentation](https://opendxl.github.io/node-red-contrib-checkpoint/jsdoc/)
+[icap Node-RED Documentation](https://opendxl.github.io/node-red-contrib-icap/jsdoc/)
 for installation instructions, API documentation, and examples.
 
 ## Bugs and Feedback
 
 For bugs, questions and discussions please use the
-[GitHub Issues](https://github.com/Anamico/node-red-contrib-checkpoint/issues).
+[GitHub Issues](https://github.com/Anamico/node-red-contrib-icap/issues).
 
 ## LICENSE
 
