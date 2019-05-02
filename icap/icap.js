@@ -134,15 +134,6 @@ module.exports = function(RED) {
         //     '.whitelisted.example.net' // match fixed domain and all subdomains
         // ]);
 
-        //  handlers
-        //  accept request/response if domain on whitelist
-        // node.server.request('*' /*whitelist*/, node.processRequest);
-        // node.server.response('*' /*whitelist*/, node.processResponse);
-        
-        //  reject otherwise
-        // server.request('*', node.rejectRequest);
-        // server.response('*', node.rejectRequest);
-
         //  helper to process a request
         node.processRequest = function(icapReq, icapRes, req, res) {
             if (!icapRes.hasFilter() && icapReq.hasPreview()) {
@@ -201,6 +192,15 @@ module.exports = function(RED) {
         //     // or your data will not send.:(
         //     icapRes.end();
         // };
+
+        //  handlers
+        //  accept request/response if domain on whitelist
+        node.server.request('*' /*whitelist*/, node.processRequest);
+        node.server.response('*' /*whitelist*/, node.processResponse);
+        
+        //  reject otherwise
+        // server.request('*', node.rejectRequest);
+        // server.response('*', node.rejectRequest);
 
         //  errors
         //  icap error
