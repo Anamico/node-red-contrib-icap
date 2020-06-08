@@ -6,67 +6,23 @@ module.exports = function(RED) {
         RED.nodes.createNode(this, config);
 
         var node = this;
+        node._icap = RED.nodes.getNode(config.icap);
 
-        this._icap = RED.nodes.getNode(config.icap);
+        node.status({ fill: "yellow", shape: "dot", text: "Registering Handler" });
 
-        node.on('input', function(msg) {
+        node.handleRequest = function() {
+        };
 
-        //     const ip = msg.payload.ip;
-        //     const group = msg.payload.group || config.group || 'BadIpList';
-        //     const comment = msg.payload.comment || config.comment || 'Set via node-red';
+        node.handleResponse = function() {
+        };
 
-        //     if (!ip) {
-        //         node.status({ fill: "red", shape: "dot", text: "Missing ip" });
-        //         node.error("Missing payload.ip", msg);
-        //         return;
-        //     }
-        //     node.status({ fill: "blue", shape: "dot", text: "Connecting" });
-        //     async.auto({
-        //         sid: this._checkpoint.login,
-            
-        //         addGroup: ['sid', function(data, callback) {
-        //             node.status({ fill: "blue", shape: "dot", text: "Set Group" });
-        //             node.log('addGroup', data.sid);
-        //             node._checkpoint.addGroup(data.sid, group, callback);
-        //         }],
-            
-        //         addHost: ['sid', function(data, callback) {     // can be in parallel?
-        //             node.status({ fill: "blue", shape: "dot", text: "Add Host" });
-        //             node.log('addHost');
-        //             node._checkpoint.addHost(data.sid, ip, comment, callback);
-        //         }],
+        var error = node._icap.registerHandler(config.checkType, config.step, node);
 
-        //         setHost: ['addGroup', 'addHost', function(data, callback) {
-        //             node.status({ fill: "blue", shape: "dot", text: "Link Host" });
-        //             node.log('setHost', data.sid);
-        //             node._checkpoint.setHost(data.sid, ip, group, callback);
-        //         }],
-
-        //         publish: ['setHost', function(data, callback) {
-        //             setTimeout(function() {
-        //                 node.status({ fill: "blue", shape: "dot", text: "Publishing" });
-        //                 node.log('publish', data.sid);
-        //                 node._checkpoint.publish(data.sid, callback);
-        //             }, 2000);
-        //         }],
-
-        //         logout: ['publish', function(data, callback) {
-        //             setTimeout(function() {
-        //                 node.status({ fill: "blue", shape: "dot", text: "Disconnect" });
-        //                 node._checkpoint.logout(callback);
-        //             }, 2000);
-        //         }]
-            
-        //     }, function(err, data) {
-        //         if (err) {
-        //             node.error(err.message, msg);
-        //             node.status({ fill: "red", shape: "dot", text: err.message});
-        //             return console.log(err);
-        //         }
-        //         node.log("Blocked " + ip);
-        //         node.status({ fill: "green", shape: "dot", text: "Blocked " + ip });
-        //     });
-        });
+        if (error) {
+            node.status({ fill: "red", shape: "dot", text: error });
+            return;
+        }
+        node.status({ fill: "green", shape: "dot", text: "Registered" });
     }
     RED.nodes.registerType("icap check", Check);
 };

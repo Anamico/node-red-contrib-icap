@@ -18,35 +18,50 @@ module.exports = function(RED) {
 
         node.startIfFullyConfigured = function() {
             // Start the ICAP server: IF all the routes are registered!
-            if (false) {
-                console.log(node.id, ',', node.name, ': Starting ICAP server...');
-                const port = node.port;
-                node.server.listen(function(port) {
-                    console.log(node.id, ',', node.name, ': ICAP server listening on port ' + port);
-                });
+            const requestKeys = Object.keys(node.requestHandlers);
+            const responseKeys = Object.keys(node.responseHandlers);
+
+            if ((requestKeys.length != config.requestSteps) || (responseKeys.length != config.responseSteps)) {
+                console.log(requestKeys.length + ' of ' + config.requestSteps + ' request steps:' + requestKeys +
+                    ' | ' + responseKeys.length + ' of ' + config.responseSteps + ' response steps:' + responseKeys);
                 return;
             }
-            console.log('waiting for more nodes');
+            console.log('All steps registered...');
+
+            console.log(node.id, ',', node.name, ': Starting ICAP server...');
+            const port = config.port;
+            node.server.listen(function(port) {
+                console.log(node.id, ',', node.name, ': ICAP server listening on port ' + port);
+                console.log(node.id, ',', node.name, ': request path is /' + config.requestPath);
+                console.log(node.id, ',', node.name, ': response path is /' + config.responsePath);
+            });
+            
+            var keys = Object.keys(node.requestHandlers);
+            keys.forEach(function(key) {
+                const handler = node.requestHandlers[key];
+                handler.status({});
+            });
+            keys = Object.keys(node.responseHandlers);
+            keys.forEach(function(key) {
+                const handler = node.responseHandlers[key];
+                handler.status({});
+            });
         }
 
         /**
          * Register a Request (Check) node to send out requests
          *
          * @param index         There can only be one per index, this is the processing order
-         * @param requestNode   The node that is registering the callback
-         * @param callback      The callback to send the requests to
+         * @param requestNode   The node that is registering as the handler
          * 
          * @returns null or error
          */
-        node.registerRequestNode = function(index, requestNode, callback) {
+        node.registerRequestHandler = function(index, requestNode) {
             const existing = node.requestHandlers[index];
             if (existing) {
                 return "Duplicate Request Index";
             }
-            node.requestHandlers[index] = {
-                node: requestNode,
-                callback: callback
-            }
+            node.requestHandlers[index] = requestNode;
             node.startIfFullyConfigured();
             return null;
         };
@@ -55,22 +70,34 @@ module.exports = function(RED) {
          * Register a Response (Check) node to send out responses
          *
          * @param index         There can only be one per index, this is the processing order
-         * @param responseNode  The node that is registering the callback
-         * @param callback      The callback to send the response to
+         * @param responseNode  The node that is registering as the handler
          * 
          * @returns null or error
          */
-        node.registerResponseNode = function(index, responseNode, callback) {
+        node.registerResponseHandler = function(index, responseNode) {
             const existing = node.responseHandlers[index];
             if (existing) {
                 return "Duplicate Response Index";
             }
-            node.responseHandlers[index] = {
-                node: responseNode,
-                callback: callback
-            }
+            node.responseHandlers[index] = responseNode;
             node.startIfFullyConfigured();
             return null;
+        };
+
+        /**
+         * Register a Response (Check) node to send out responses
+         *
+         * @param type          "Request" or "Response"
+         * @param index         There can only be one per index (per type), this is the processing order
+         * @param responseNode  The node that is registering as the handler
+         * 
+         * @returns null or error
+         */
+        node.registerHandler = function (checkType, step, handler) {
+            if (checkType == 'Request') {
+                return this.registerRequestHandler(step, handler);
+            }
+            return this.registerResponseHandler(step, handler);
         };
 
         /**
@@ -92,7 +119,7 @@ module.exports = function(RED) {
         //    to have different options for requests and responses,
         //    configure squid to send these to different ICAP resource paths
         // REQMOD
-        node.server.options('/request', (icapReq, icapRes, next) => {
+        node.server.options('/' + config.RequestPath, (icapReq, icapRes, next) => {
             icapRes.setIcapStatusCode(200);
             icapRes.setIcapHeaders({
               'Methods': 'REQMOD',
@@ -103,7 +130,7 @@ module.exports = function(RED) {
         });
           
         // RESPMOD
-        node.server.options('/response', (icapReq, icapRes, next) => {
+        node.server.options('/' + config.ResponsePath, (icapReq, icapRes, next) => {
             icapRes.setIcapStatusCode(200);
             icapRes.setIcapHeaders({
               'Methods': 'RESPMOD',
@@ -126,13 +153,6 @@ module.exports = function(RED) {
             }
             next();
         });
-
-        //  whitelist of allowed sites
-        // var whitelist = new DomainList();
-        // whitelist.addMany([
-        //     'whitelisted.example.com', // match fixed domain
-        //     '.whitelisted.example.net' // match fixed domain and all subdomains
-        // ]);
 
         //  helper to process a request
         node.processRequest = function(icapReq, icapRes, req, res) {

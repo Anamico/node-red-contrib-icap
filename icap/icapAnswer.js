@@ -13,8 +13,7 @@ module.exports = function(RED) {
         RED.nodes.createNode(this, config);
 
         var node = this;
-
-        this._icap = RED.nodes.getNode(config.icap);
+        node._icap = RED.nodes.getNode(config.icap);
 
         node.on('input', function(msg) {
 
