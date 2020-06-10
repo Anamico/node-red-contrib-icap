@@ -4,6 +4,17 @@
 const ICAPServer = require('nodecap2').ICAPServer;
 const DomainList = require('nodecap2').DomainList;
 
+// const isPortTaken = (port) => new Promise<boolean>((resolve, reject) => {
+//     const tester = Net.createServer()
+// //resolve true not false
+//      .once('error', err => (err.code == 'EADDRINUSE' ? resolve(true) : reject(err)))
+// // resolve false not true
+//      .once('listening', () => tester.once('close', () => resolve(false)).close())
+//      .listen(port)
+// });
+
+
+
 module.exports = function(RED) {
 
     function ICAP(config) {
@@ -30,6 +41,8 @@ module.exports = function(RED) {
 
             console.log(node.id, ',', node.name, ': Starting ICAP server...');
             const port = config.port;
+
+            //isPortTaken(port).then(function() {}).error(function() {})
             node.server.listen(function(port) {
                 console.log(node.id, ',', node.name, ': ICAP server listening on port ' + port);
                 console.log(node.id, ',', node.name, ': request path is /' + config.requestPath);
@@ -38,11 +51,13 @@ module.exports = function(RED) {
             
             var keys = Object.keys(node.requestHandlers);
             keys.forEach(function(key) {
+                console.log('updating request handler ' + key);
                 const handler = node.requestHandlers[key];
                 handler.status({});
             });
             keys = Object.keys(node.responseHandlers);
             keys.forEach(function(key) {
+                console.log('updating response handler ' + key);
                 const handler = node.responseHandlers[key];
                 handler.status({});
             });
@@ -233,6 +248,16 @@ module.exports = function(RED) {
             }
             next();
         });
+
+        node.on('close', () => {
+            node.server && node.server.close(function(err) {
+                if (err) {
+                    console.error(node.id, ',', node.name, ': ICAP server close error ', err);
+                    return;
+                }
+                console.log(node.id, ',', node.name, ': ICAP server closed');
+            });
+        })
     }
 
     RED.nodes.registerType("icap", ICAP);
