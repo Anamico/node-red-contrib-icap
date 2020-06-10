@@ -134,7 +134,7 @@ module.exports = function(RED) {
         //    to have different options for requests and responses,
         //    configure squid to send these to different ICAP resource paths
         // REQMOD
-        node.server.options('/' + config.RequestPath, (icapReq, icapRes, next) => {
+        node.server.options('/' + config.requestPath, (icapReq, icapRes, next) => {
             icapRes.setIcapStatusCode(200);
             icapRes.setIcapHeaders({
               'Methods': 'REQMOD',
@@ -145,7 +145,7 @@ module.exports = function(RED) {
         });
           
         // RESPMOD
-        node.server.options('/' + config.ResponsePath, (icapReq, icapRes, next) => {
+        node.server.options('/' + config.responsePath, (icapReq, icapRes, next) => {
             icapRes.setIcapStatusCode(200);
             icapRes.setIcapHeaders({
               'Methods': 'RESPMOD',
