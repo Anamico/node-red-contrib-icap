@@ -2,7 +2,7 @@
 
 //var request = require('request');
 const ICAPServer = require('nodecap2').ICAPServer;
-const DomainList = require('nodecap2').DomainList;
+//const DomainList = require('nodecap2').DomainList;
 
 // const isPortTaken = (port) => new Promise<boolean>((resolve, reject) => {
 //     const tester = Net.createServer()
@@ -22,7 +22,7 @@ module.exports = function(RED) {
 
         var node = this;
         node.server = new ICAPServer({
-            debug: false
+            debug: true
         });
         node.requestHandlers = {};
         node.responseHandlers = {};
