@@ -30,7 +30,7 @@
   "homepage": "https://flows.nodered.org/node/node-red-contrib-icap",
   "bugs": "https://github.com/Anamico/node-red-contrib-icap/issues",
   "dependencies": {
-    "async": "^2.6.1",
+    "async": "^3.2.2",
     "nodecap2": "^2.2.2",
     "request": "^2.88.0"
   },
